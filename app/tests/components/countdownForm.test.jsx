@@ -7,10 +7,11 @@ var $ = require('jQuery');
 var CountdownForm = require('CountdownForm');
 
 describe('CountdownForm', () => {
-   if('should exist', ()=> {
-       expect(CountdownForm.toExist());
+   it('should exist', ()=> {
+       expect(CountdownForm).toExist();
    });
-   if('should call onSetCountdown if valid seconds entered', () => {
+
+   it('should call onSetCountdown if valid seconds entered', () => {
        var spy = expect.createSpy();
        var countdownForm = TestUtilds.renderIntoDocument(<CountdownForm onSetCountdown={spy}/>);
        var $el = $(ReactDOM.findDOMNode(countdownForm));
@@ -19,4 +20,14 @@ describe('CountdownForm', () => {
        TestUtilds.Simulate.submit($el.find('form')[0]);
        expect(spy).toHaveBeenCalledWith(109);
    });
+
+    it('should not call onSetCountdown if invalid seconds entered', () => {
+        var spy = expect.createSpy();
+        var countdownForm = TestUtilds.renderIntoDocument(<CountdownForm onSetCountdown={spy}/>);
+        var $el = $(ReactDOM.findDOMNode(countdownForm));
+
+        countdownForm.refs.seconds.value = 'af50';
+        TestUtilds.Simulate.submit($el.find('form')[0]);
+        expect(spy).toNotHaveBeenCalled();
+    });
 });

@@ -9,12 +9,6 @@ var Timer = React.createClass({
             status: 'stopped'
         }
     },
-    handleSetCountdown: function (seconds) {
-        this.setState({
-            count: seconds,
-            status: 'started'
-        })
-    },
     handleStatusChange: function (newStatus) {
         this.setState({status: newStatus});
     },
@@ -35,11 +29,13 @@ var Timer = React.createClass({
     },
     startTimer: function () {
         this.timer = setInterval(() => {
-            var newCount = this.state.count + 1;
             this.setState({
-                count: newCount
+                count: this.state.count + 1
             });
         }, 1000);
+    },
+    componentWillUnmount: function () {
+        clearInterval(this.timer)
     },
     render: function () {
         var {count, status} = this.state;
